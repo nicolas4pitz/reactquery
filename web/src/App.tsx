@@ -6,26 +6,17 @@ import {
 
 const queryClient = new QueryClient()
 
-export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Example />
-    </QueryClientProvider>
-  )
+const getTodos = async () => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+  return response.json()
 }
 
-function Example() {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () =>
-      fetch('https://api.github.com/repos/TanStack/query').then((res) =>
-        res.json(),
-      ),
+export default function App() {
+  const {data} = useQuery({
+    queryKey: ['todos'],
+    queryFn: getTodos,
   })
 
-  if (isPending) return 'Loading...'
-
-  if (error) return 'An error has occurred: ' + error.message
 
   return (
     <div>
